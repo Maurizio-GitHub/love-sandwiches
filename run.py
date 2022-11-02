@@ -23,22 +23,25 @@ CREDS = Credentials.from_service_account_file('creds.json')
 
 SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 
-# GSPREAD_CLIENT is assigned by passing the SCOPED_CREDS variable as a parameter of the 'gspread.authorize' method.
+# GSPREAD_CLIENT is assigned by passing the SCOPED_CREDS variable as a parameter of the 'gspread.authorize' method:
 
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 
-# SHEET provides access to the 'love_sandwiches' spreadsheet and is assigned by passing the file name as a parameter of the 'open' method of the GSPREAD_CLIENT object.
+# SHEET provides access to the 'love_sandwiches' spreadsheet and is assigned by passing the file name as a parameter of the 'open' method of the GSPREAD_CLIENT object:
 
 SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 
-# Here is how to access the data into the 'sales' worksheet. The parameter name, 'sales', corresponds to the name of the relevant worksheet:
+# Function to collect sales data from users:
 
-sales = SHEET.worksheet('sales')
+def get_sales_data():
+    """
+    It gets sales figures input from the user
+    """
+    print('Please, enter sales data from the last market.')
+    print('Data should be six numbers, separated by commas.')
+    print('Example: 10, 20, 30, 40, 50, 60\n')
 
-# Here a 'gspread' method, 'get_all_values' is called to pull all the values from our sales worksheet:
+    data_string = input('Enter data here: ')
+    print(f'The data provided is {data_string}')
 
-data = sales.get_all_values()
-
-# Whenever data is printed out here (by typing 'python3 run.py' to the terminal), it is imported as a list of lists:
-
-print(data)
+get_sales_data()
