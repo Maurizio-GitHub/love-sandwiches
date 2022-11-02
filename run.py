@@ -60,10 +60,11 @@ def get_sales_data():
 def validate_data(values):
     """
     It tries to convert the provided string values into integers and raises ValueError if:
+    - the strings cannot be converted into integers;
     - there are not exactly six values (length of the provided list not equal to 6);
-    - the strings cannot be converted into integers.
     """
     try:
+        [int(value) for value in values]
         if len(values) != 6:
             raise ValueError(f'Exactly 6 values are required; {len(values)} entered instead')
 
