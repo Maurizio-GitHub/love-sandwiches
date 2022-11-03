@@ -36,7 +36,9 @@ SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 
 def get_sales_data():
     """
-    It gets sales figures input from the user
+    It gets sales figures input from the user via the terminal.
+    It runs a while-loop to collect a valid string of data, which must be a string of six numers separated by commas.
+    The loop will repeatedly request data until it is valid.
     """
     while True:
         print('Please, enter sales data from the last market.')
@@ -88,6 +90,34 @@ def validate_data(values):
     return True
 
 
+def update_sales_data(data):
+    """
+    It updates the sales worksheet by adding to it a new row with the list of user-provided data.
+    """
+    print('Updating sales worksheet...\n')
+
+    # The access to the sales data hosted into the sales worksheet is allowed through the 'worksheet()' method of the SHEET object.
+    # The parameter name, 'sales', must correspond to the name of the relevant worksheet:
+
+    sales_worksheet = SHEET.worksheet('sales')
+
+    # The action of appending data to the spreadsheet hosted into Google Drive is allowed through the 'append_row()' method imported via the 'gspread' library.
+    # A new row is added to the end of data present into the selected worksheet:
+
+    sales_worksheet.append_row(data)
+
+    # Print-statements like this are commonly used to provide relevant feedback via the terminal:
+
+    print('Sales worksheet updated successfully.\n')
+
 # The following variable contains the correct sales data returned by 'get_sales_data()' function upon validation:
 
 data = get_sales_data()
+
+# Here, the data values provided are converted into integers:
+
+sales_data = [int(number) for number in data]
+
+# Finally, the function writing data to spreadsheet is called:
+
+update_sales_data(sales_data)
