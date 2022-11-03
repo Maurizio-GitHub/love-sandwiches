@@ -38,21 +38,29 @@ def get_sales_data():
     """
     It gets sales figures input from the user
     """
-    print('Please, enter sales data from the last market.')
-    print('Data should be six numbers, separated by commas.')
-    print('Example: 10, 20, 30, 40, 50, 60\n')
+    while True:
+        print('Please, enter sales data from the last market.')
+        print('Data should be six numbers, separated by commas.')
+        print('Example: 10, 20, 30, 40, 50, 60\n')
 
-    # The user is prompted with a call to action:
+        # The user is prompted with a call to action:
 
-    data_string = input('Enter data here: ')
+        data_string = input('Enter data here: ')
 
-    # The 'split()' method returns the broken up values as a list, removing the specified punctuation (comma) used to enter data:
+        # The 'split()' method returns the broken up values as a list, removing the specified punctuation (comma) used to enter data:
 
-    sales_data = data_string.split(',')
+        sales_data = data_string.split(',')
 
-    # The validation function is called, by passing it the list containing the sales data:
+        # The validation function is called, by passing it the list containing the sales data.
+        # If the function returns 'True' (no errors found), the while-loop breaks; otherwise, the user is prompted again with the same call to action:
 
-    validate_data(sales_data)
+        if validate_data(sales_data):
+            print('Valid data entered; thank you.')
+            break
+
+    # Upon successful validation, the sales data list is returned:
+
+    return sales_data
 
 
 # Function validating user data entries; it accepts a parameter representing the sales data list:
@@ -70,8 +78,16 @@ def validate_data(values):
 
     # The ValueError class contains the details of the error triggered in the try-block.
     # The 'as' keyword allows for the assignement of the ValueError object to the 'e' variable, which is standard Python shorthand for 'error':
+
     except ValueError as e:
         print(f'Invalid data: {e}; please, try again.\n')
+        return False
+
+    # These boolean return values (in the following and above) serve as a stopping condition for the while-loop within 'get_sales_data()' function:
+
+    return True
 
 
-get_sales_data()
+# The following variable contains the correct sales data returned by 'get_sales_data()' function upon validation:
+
+data = get_sales_data()
