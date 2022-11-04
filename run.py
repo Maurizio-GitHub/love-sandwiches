@@ -3,6 +3,7 @@
 
 import gspread
 from google.oauth2.service_account import Credentials
+from pprint import pprint
 
 # The variables whose value is never going to change (SCOPE, CREDS, SCOPED_CREDS, GSPREAD_CLIENT, SHEET) are written in capital letters.
 # In Python, this is a best practice to flag constants (i.e. variables that should not be changed) to other developers.
@@ -31,8 +32,6 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 
 SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 
-
-# Function to collect sales data from users:
 
 def get_sales_data():
     """
@@ -65,10 +64,9 @@ def get_sales_data():
     return sales_data
 
 
-# Function validating user data entries; it accepts a parameter representing the sales data list:
-
 def validate_data(values):
     """
+    It validates user data entries (accepting a parameter representing user-entered sales data list).
     It tries to convert the provided string values into integers and raises ValueError if:
     - the strings cannot be converted into integers;
     - there are not exactly six values (length of the provided list not equal to 6);
@@ -110,14 +108,37 @@ def update_sales_data(data):
 
     print('Sales worksheet updated successfully.\n')
 
-# The following variable contains the correct sales data returned by 'get_sales_data()' function upon validation:
 
-data = get_sales_data()
+def calculate_surplus_data(sales_row):
+    """
+    It compares sales with stock and calculates the surplus for each item type.
+    The surplus is defined as the sales figures subtracted from the stock:
+    - Positive surplus indicates a waste;
+    - Negative surplus indicates extra made, due to stock sold out.
+    """
+    print('Calculating surplus data...\n')
+    stock = SHEET.worksheet('stock').get_all_values()
+    stock_row = stock[-1]
+    print(stock_row)
 
-# Here, the data values provided are converted into integers:
 
-sales_data = [int(number) for number in data]
+def main():
+    """
+    It runs all program functions.
+    The variable assigned first contains the correct sales data returned upon validation.
+    The second is assigned with the sales data values converted to integers.
+    Then, the following functions are called:
+    - The function writing data to the spreadsheet;
+    - The function to calculate surplus data;
+    Indeed, it is common practice to wrap the main function calls of a program within a function called main().
+    """
+    data = get_sales_data()
+    sales_data = [int(number) for number in data]
+    update_sales_data(sales_data)
+    calculate_surplus_data(sales_data)
 
-# Finally, the function writing data to spreadsheet is called:
 
-update_sales_data(sales_data)
+# In Python, function calls must always follow their definitions:
+
+print('Welcome to Love Sandwiches Data Automation!')
+main()
