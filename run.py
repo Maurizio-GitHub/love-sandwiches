@@ -88,7 +88,7 @@ def validate_data(values):
     return True
 
 
-def update_sales_data(data):
+def update_sales_worksheet(data):
     """
     It updates the sales worksheet by adding to it a new row with the list of user-provided data.
     """
@@ -126,20 +126,43 @@ def calculate_surplus_data(sales_row):
     return surplus_data
 
 
+def update_surplus_worksheet(data):
+    """
+    It updates the surplus worksheet by adding to it a new row with the list of calculated surplus data.
+    """
+    print('Updating surplus worksheet...\n')
+
+    # The access to the surplus data hosted into the surplus worksheet is allowed through the 'worksheet()' method of the SHEET object.
+    # The parameter name, 'surplus', must correspond to the name of the relevant worksheet:
+
+    surplus_worksheet = SHEET.worksheet('surplus')
+
+    # The action of appending data to the spreadsheet hosted into Google Drive is allowed through the 'append_row()' method imported via the 'gspread' library.
+    # A new row is added to the end of data present into the selected worksheet:
+
+    surplus_worksheet.append_row(data)
+
+    # Print-statements like this are commonly used to provide relevant feedback via the terminal:
+
+    print('Surplus worksheet updated successfully.\n')
+
+
 def main():
     """
     It runs all program functions.
     The variable assigned first contains the correct sales data returned upon validation.
     The second is assigned with the sales data values converted to integers.
     Then, the following functions are called:
-    - The function writing data to the spreadsheet;
+    - The function writing the sales data to the relevant spreadsheet;
     - The function to calculate the surplus data;
+    - The function writing the calculated surplus data to the relevant spreadsheet;
     Indeed, it is common practice to wrap the main function calls of a program within a function called main().
     """
     data = get_sales_data()
     sales_data = [int(number) for number in data]
-    update_sales_data(sales_data)
+    update_sales_worksheet(sales_data)
     current_surplus_data = calculate_surplus_data(sales_data)
+    update_surplus_worksheet(current_surplus_data)
 
 
 # In Python, function calls must always follow their definitions:
