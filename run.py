@@ -117,9 +117,13 @@ def calculate_surplus_data(sales_row):
     - Negative surplus indicates extra made, due to stock sold out.
     """
     print('Calculating surplus data...\n')
+
+    # The 'get_all_values()' method (imported from 'gspread') is called to pull all the values from the stock worksheet:
+
     stock = SHEET.worksheet('stock').get_all_values()
     stock_row = stock[-1]
-    print(stock_row)
+    surplus_data = [int(stock) - sales for stock, sales in zip(stock_row, sales_row)]
+    return surplus_data
 
 
 def main():
@@ -129,13 +133,13 @@ def main():
     The second is assigned with the sales data values converted to integers.
     Then, the following functions are called:
     - The function writing data to the spreadsheet;
-    - The function to calculate surplus data;
+    - The function to calculate the surplus data;
     Indeed, it is common practice to wrap the main function calls of a program within a function called main().
     """
     data = get_sales_data()
     sales_data = [int(number) for number in data]
     update_sales_data(sales_data)
-    calculate_surplus_data(sales_data)
+    current_surplus_data = calculate_surplus_data(sales_data)
 
 
 # In Python, function calls must always follow their definitions:
