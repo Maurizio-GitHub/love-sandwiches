@@ -112,7 +112,7 @@ def update_worksheet(data, worksheet):
 
 def calculate_surplus_data(sales_row):
     """
-    It compares sales with stock and calculates the surplus for each item type.
+    It compares sales with stock and calculates the current surplus for each item type.
     The surplus is defined as the sales figures subtracted from the stock:
     - Positive surplus indicates a waste;
     - Negative surplus indicates extra made, due to stock sold out.
@@ -122,9 +122,32 @@ def calculate_surplus_data(sales_row):
     # The 'get_all_values()' method (imported from 'gspread') is called to pull all the values from the stock worksheet:
 
     stock = SHEET.worksheet('stock').get_all_values()
+
+    # Only the last worksheet row is needed to calculate the current surplus:
+
     stock_row = stock[-1]
     surplus_data = [int(stock) - sales for stock, sales in zip(stock_row, sales_row)]
+
     return surplus_data
+
+
+def get_last_5_entries_sales():
+    """
+    It collects columns of data from the sales worksheet,
+    getting the last 5 entries for each sandwich type and returns data as a list of lists.
+    """
+    sales = SHEET.worksheet('sales')
+
+    # The access to single columns is allowed by using the 'col_values()' method provided by 'gspread'.
+    # The column number, given as a parameter, it is a 1-based index:
+
+    columns = []
+
+    for index in range(1, 7):
+        column = sales.col_values(index)
+        columns.append(column[-5:])
+
+    return columns
 
 
 def main():
@@ -148,4 +171,5 @@ def main():
 # In Python, function calls must always follow their definitions:
 
 print('Welcome to Love Sandwiches Data Automation!')
-main()
+# main()
+sales_columns = get_last_5_entries_sales()
