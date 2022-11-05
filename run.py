@@ -3,7 +3,6 @@
 
 import gspread
 from google.oauth2.service_account import Credentials
-from pprint import pprint
 
 # The variables whose value is never going to change (SCOPE, CREDS, SCOPED_CREDS, GSPREAD_CLIENT, SHEET) are written in capital letters.
 # In Python, this is a best practice to flag constants (i.e. variables that should not be changed) to other developers.
@@ -46,7 +45,7 @@ def get_sales_data():
 
         # The user is prompted with a call to action:
 
-        data_string = input('Enter data here: ')
+        data_string = input('Enter data here:\n')
 
         # The 'split()' method returns the broken up values as a list, removing the specified punctuation (comma) used to enter data:
 
