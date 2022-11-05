@@ -150,6 +150,22 @@ def get_last_5_entries_sales():
     return columns
 
 
+def calculate_stock_data(data):
+    """
+    It calculates the average stock for each sandwich type, adding 10%.
+    """
+    print('Calculating stock data...\n')
+    current_stock_data = []
+
+    for column in data:
+        integers_column = [int(number) for number in column]
+        average = sum(integers_column) / len(integers_column)
+        stock_number = average * 1.1
+        current_stock_data.append(round(stock_number))
+
+    return current_stock_data
+
+
 def main():
     """
     It runs all program functions.
@@ -157,8 +173,11 @@ def main():
     The second is assigned with the sales data values converted to integers.
     Then, the following functions are called:
     - The function writing data (sales first) to the relevant spreadsheet;
-    - The function to calculate the surplus data;
-    - The function writing data (calculated surplus) to the relevant spreadsheet.
+    - The function calculating the surplus data;
+    - The function writing data (calculated surplus) to the relevant spreadsheet;
+    - The function getting the last 5 markets data as a list of lists (columns);
+    - The function calculating the stock data for next day;
+    - The function writing data (calculated stock) to the relevant spreadsheet.
     Indeed, it is common practice to wrap the main function calls of a program within a function called main().
     """
     data = get_sales_data()
@@ -166,10 +185,12 @@ def main():
     update_worksheet(sales_data, 'sales')
     current_surplus_data = calculate_surplus_data(sales_data)
     update_worksheet(current_surplus_data, 'surplus')
+    sales_columns = get_last_5_entries_sales()
+    stock_data = calculate_stock_data(sales_columns)
+    update_worksheet(stock_data, 'stock')
 
 
 # In Python, function calls must always follow their definitions:
 
 print('Welcome to Love Sandwiches Data Automation!')
-# main()
-sales_columns = get_last_5_entries_sales()
+main()
