@@ -45,7 +45,7 @@ def get_sales_data():
 
         # The user is prompted with a call to action:
 
-        data_string = input('Enter data here:\n')
+        data_string = input('Enter data here: ')
 
         # The 'split()' method returns the broken up values as a list, removing the specified punctuation (comma) used to enter data:
 
@@ -55,7 +55,7 @@ def get_sales_data():
         # If the function returns 'True' (no errors found), the while-loop breaks; otherwise, the user is prompted again with the same call to action:
 
         if validate_data(sales_data):
-            print('Valid data entered; thank you.')
+            print('Valid data entered, thank you.\n')
             break
 
     # Upon successful validation, the sales data list is returned:
@@ -125,6 +125,9 @@ def calculate_surplus_data(sales_row):
     # Only the last worksheet row is needed to calculate the current surplus:
 
     stock_row = stock[-1]
+
+    # List comprehension is used to shorten the code:
+
     surplus_data = [int(stock) - sales for stock, sales in zip(stock_row, sales_row)]
 
     return surplus_data
@@ -138,7 +141,7 @@ def get_last_5_entries_sales():
     sales = SHEET.worksheet('sales')
 
     # The access to single columns is allowed by using the 'col_values()' method provided by 'gspread'.
-    # The column number, given as a parameter, it is a 1-based index:
+    # The column number, given as a parameter, it is a 1-based index (there are 6 columns to fetch from the spreadsheet):
 
     columns = []
 
@@ -152,6 +155,8 @@ def get_last_5_entries_sales():
 def calculate_stock_data(data):
     """
     It calculates the average stock for each sandwich type, adding 10%.
+    The average is calculated based on the last 5 markets.
+    The method 'len()' (to count values in columns) is used in place of '5'.
     """
     print('Calculating stock data...\n')
     current_stock_data = []
@@ -165,19 +170,36 @@ def calculate_stock_data(data):
     return current_stock_data
 
 
+def display_suggestions(data):
+    """
+    It gets the relevant piece of information from the stock worksheet to build a dictionary,
+    which represents the key-value pairs showcasing the suggested number of sandwiches, for each type,
+    to be prepared for next market.
+    """
+    print("Make the following numbers of sandwiches for next market:")
+
+    # Index slicing is appropriately leveraged to directly access the headings from the stock worksheet:
+
+    headings = SHEET.worksheet("stock").get_all_values()[0]
+
+    # Dictionary comprehension is used to shorten the code:
+
+    suggestions = {headings: data for headings, data in zip(headings, data)}
+    print(suggestions)
+
+
 def main():
     """
-    It runs all program functions.
+    It runs all program functions: it is common practice to wrap the main function calls of a program within a function called main().
     The variable assigned first contains the correct sales data returned upon validation.
-    The second is assigned with the sales data values converted to integers.
-    Then, the following functions are called:
+    The second is assigned with the sales data values converted to integers. Then, the following functions are called:
     - The function writing data (sales first) to the relevant spreadsheet;
     - The function calculating the surplus data;
     - The function writing data (calculated surplus) to the relevant spreadsheet;
     - The function getting the last 5 markets data as a list of lists (columns);
-    - The function calculating the stock data for next day;
-    - The function writing data (calculated stock) to the relevant spreadsheet.
-    Indeed, it is common practice to wrap the main function calls of a program within a function called main().
+    - The function calculating the stock data for next market;
+    - The function writing data (calculated stock) to the relevant spreadsheet;
+    - The function displaying the suggestions for next market.
     """
     data = get_sales_data()
     sales_data = [int(number) for number in data]
@@ -187,9 +209,10 @@ def main():
     sales_columns = get_last_5_entries_sales()
     stock_data = calculate_stock_data(sales_columns)
     update_worksheet(stock_data, 'stock')
+    display_suggestions(stock_data)
 
 
 # In Python, function calls must always follow their definitions:
 
-print('Welcome to Love Sandwiches Data Automation!')
+print('Welcome to Love Sandwiches Data Automation!\n')
 main()
