@@ -45,7 +45,7 @@ def get_sales_data():
 
         # The user is prompted with a call to action:
 
-        data_string = input('Enter data here: ')
+        data_string = input('Enter data here:\n')
 
         # The 'split()' method returns the broken up values as a list, removing the specified punctuation (comma) used to enter data:
 
